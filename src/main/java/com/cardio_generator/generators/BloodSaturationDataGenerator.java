@@ -4,6 +4,10 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+
+/**
+ * class that generates Blood Saturation using randomized approach
+ */
 public class BloodSaturationDataGenerator implements PatientDataGenerator {
     private static final Random random = new Random();
     private int[] lastSaturationValues;
@@ -17,6 +21,9 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
         }
     }
 
+    /**
+     * standart method that generates saturation value and outputs it
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {

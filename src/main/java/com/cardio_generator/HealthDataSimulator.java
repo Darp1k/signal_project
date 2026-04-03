@@ -25,6 +25,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+
+/**
+ * Simulates a data generation for specified number of patients.
+ */
+
 public class HealthDataSimulator {
 
     private static int patientCount = 50; // Default number of patients
@@ -44,6 +49,16 @@ public class HealthDataSimulator {
         scheduleTasksForPatients(patientIds);
     }
 
+    /**
+     * 
+     * @param args to OPTIONNALY specify the output method or patient count 
+     * --patient-count X, replace X with the number of patients to simulate
+     * --output X, replace X with the output method from the list(console, file:<directory>,
+     * websocket:<port>, tcp:<port>)
+     * -h, get more detailed args manual
+     * Base case: patient_count = 50, output = console
+     * @throws IOException
+     */
     private static void parseArguments(String[] args) throws IOException {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -105,6 +120,10 @@ public class HealthDataSimulator {
         }
     }
 
+    /**
+     * prints possible options for arguments 
+     * @return void
+     */
     private static void printHelp() {
         System.out.println("Usage: java HealthDataSimulator [options]");
         System.out.println("Options:");
@@ -122,6 +141,11 @@ public class HealthDataSimulator {
                 "  This command simulates data for 100 patients and sends the output to WebSocket clients connected to port 8080.");
     }
 
+    /**
+     * creates list of patient ids from 1 to patientCount
+     * @param patientCount
+     * @return List<Integer> of patient IDs
+     */
     private static List<Integer> initializePatientIds(int patientCount) {
         List<Integer> patientIds = new ArrayList<>();
         for (int i = 1; i <= patientCount; i++) {
@@ -130,6 +154,12 @@ public class HealthDataSimulator {
         return patientIds;
     }
 
+    /**
+     * creates 5 generators and then assigns to each patient 5 generators that will
+     * give the specific output with a specific period
+     * @see scheduleTask 
+     * @param patientIds
+     */
     private static void scheduleTasksForPatients(List<Integer> patientIds) {
         ECGDataGenerator ecgDataGenerator = new ECGDataGenerator(patientCount);
         BloodSaturationDataGenerator bloodSaturationDataGenerator = new BloodSaturationDataGenerator(patientCount);
@@ -146,6 +176,12 @@ public class HealthDataSimulator {
         }
     }
 
+    /**
+     * schedules task to repeat every period with the initial delay of randomly distributed (from 0 to 5) time units
+     * @param task runnable task that can be executed in a distinct thread
+     * @param period in how many time units repeat the task
+     * @param timeUnit seconds, minutes, ...
+     */
     private static void scheduleTask(Runnable task, long period, TimeUnit timeUnit) {
         scheduler.scheduleAtFixedRate(task, random.nextInt(5), period, timeUnit);
     }

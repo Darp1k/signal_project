@@ -4,6 +4,9 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+/**
+ * class to track any alerts that may occur
+ */
 public class AlertGenerator implements PatientDataGenerator {
 
     private static final Random RANDOM_GENERATOR = new Random(); // changed to private and changed name
@@ -13,6 +16,11 @@ public class AlertGenerator implements PatientDataGenerator {
         alertStates = new boolean[patientCount + 1]; 
     }
 
+    /**
+     * method generates alert and outputs it
+     * resolved state appears 90% of time
+     * pressed 10 % of time
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {

@@ -6,6 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 
+/**
+ * output strategy to get data if a client is connected to a server
+ */
 public class TcpOutputStrategy implements OutputStrategy {
 
     private ServerSocket serverSocket;
@@ -32,6 +35,9 @@ public class TcpOutputStrategy implements OutputStrategy {
         }
     }
 
+    /**
+     * method that provides output only if a client is connected to the server(out != null)
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         if (out != null) {

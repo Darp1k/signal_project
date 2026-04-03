@@ -7,11 +7,16 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+/**
+ * output strategy to write medical outputs into designated directory
+ */
 public class FileOutputStrategy implements OutputStrategy {
 
     private String baseDirectory; // file names should start from a small letter
 
     private final ConcurrentHashMap<String, String> fileMap = new ConcurrentHashMap<>(); // removed underline to follow the guidelines and made it private for encapsulation
+
 
     public FileOutputStrategy(String baseDirectory) {
         this.baseDirectory = baseDirectory;
@@ -24,6 +29,11 @@ public class FileOutputStrategy implements OutputStrategy {
     }
 
     @Override
+    /**
+     * overriden method that writes all parameters into the files
+     * text files are automatically created based on baseDirectory 
+     * for example: ECG data goes into <directory>/ECG.txt
+     */
     public void output(int patientId, long timestamp, String label, String data) {
         // Set the FilePath variable
         String filePath = fileMap.computeIfAbsent(label, k -> Paths.get(baseDirectory, label + ".txt").toString()); // first letter must be small
