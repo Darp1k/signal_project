@@ -9,33 +9,31 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FileOutputStrategy implements OutputStrategy {
 
-    private String BaseDirectory;
+    private String baseDirectory; // file names should start from a small letter
 
-    public final ConcurrentHashMap<String, String> file_map = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, String> fileMap = new ConcurrentHashMap<>(); // removed underline to follow the guidelines and made it private for encapsulation
 
     public FileOutputStrategy(String baseDirectory) {
-
-        this.BaseDirectory = baseDirectory;
+        this.baseDirectory = baseDirectory;
+        try { // moved directory creation here because there is no need to try to create the directory every time output is called
+            // Create the directory
+            Files.createDirectories(Paths.get(baseDirectory));
+        } catch (IOException e) {
+            System.err.println("Error creating base directory: " + e.getMessage());
+        }
     }
 
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
-        try {
-            // Create the directory
-            Files.createDirectories(Paths.get(BaseDirectory));
-        } catch (IOException e) {
-            System.err.println("Error creating base directory: " + e.getMessage());
-            return;
-        }
         // Set the FilePath variable
-        String FilePath = file_map.computeIfAbsent(label, k -> Paths.get(BaseDirectory, label + ".txt").toString());
+        String filePath = fileMap.computeIfAbsent(label, k -> Paths.get(baseDirectory, label + ".txt").toString()); // first letter must be small
 
         // Write the data to the file
         try (PrintWriter out = new PrintWriter(
-                Files.newBufferedWriter(Paths.get(FilePath), StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
+                Files.newBufferedWriter(Paths.get(filePath), StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
             out.printf("Patient ID: %d, Timestamp: %d, Label: %s, Data: %s%n", patientId, timestamp, label, data);
         } catch (Exception e) {
-            System.err.println("Error writing to file " + FilePath + ": " + e.getMessage());
+            System.err.println("Error writing to file " + filePath + ": " + e.getMessage());
         }
     }
 }
