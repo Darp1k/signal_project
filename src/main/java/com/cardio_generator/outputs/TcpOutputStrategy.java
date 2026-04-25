@@ -36,6 +36,10 @@ public class TcpOutputStrategy implements OutputStrategy {
     }
 
     /**
+     * @param patientId The ID of the patient for whom to generate data.
+     * @param timestamp The timestamp of the data generation event.
+     * @param label Name of the data type being generated (e.g., "ECG", "HeartRate").
+     * @param data The actual data value to be outputted.
      * method that provides output only if a client is connected to the server(out != null)
      */
     @Override

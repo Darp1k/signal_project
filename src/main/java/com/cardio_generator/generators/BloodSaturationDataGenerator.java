@@ -22,7 +22,9 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
     }
 
     /**
-     * standart method that generates saturation value and outputs it
+     * @param patientId The ID of the patient for whom to generate data.
+     * @param outputStrategy The strategy to use for outputting the generated data.
+     * method generates data and outputs it with output strategy
      */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {

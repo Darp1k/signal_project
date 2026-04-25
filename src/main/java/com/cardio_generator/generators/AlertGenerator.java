@@ -17,7 +17,9 @@ public class AlertGenerator implements PatientDataGenerator {
     }
 
     /**
-     * method generates alert and outputs it
+     * @param patientId the ID of the patient for whom to generate data.
+     * @param outputStrategy The strategy to use for outputting the generated data.
+     * method generates alert and outputs it wit output strategy
      * resolved state appears 90% of time
      * pressed 10 % of time
      */
