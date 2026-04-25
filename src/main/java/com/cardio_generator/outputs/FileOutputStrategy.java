@@ -28,12 +28,17 @@ public class FileOutputStrategy implements OutputStrategy {
         }
     }
 
-    @Override
+
     /**
+     * @param patientId The ID of the patient for whom to generate data.
+     * @param timestamp The timestamp of the data generation event.
+     * @param label Name of the data type being generated (e.g., "ECG", "HeartRate").
+     * @param data The actual data value to be outputted.
      * overriden method that writes all parameters into the files
      * text files are automatically created based on baseDirectory 
      * for example: ECG data goes into <directory>/ECG.txt
      */
+    @Override
     public void output(int patientId, long timestamp, String label, String data) {
         // Set the FilePath variable
         String filePath = fileMap.computeIfAbsent(label, k -> Paths.get(baseDirectory, label + ".txt").toString()); // first letter must be small
