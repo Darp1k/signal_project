@@ -67,3 +67,36 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Project members
 Makarov Petr - I6433588
 
+## Uml models
+
+1. AlerSystem
+Path: uml_models/AlertSystem.png
+Core of this system is AlertGenerator, it simulates reat time data, when the anomaly is detected
+it creates an Alert and passes it to the AlertManager, which is passing it to the dedicated place
+Threshold rule is an interface to provide multiple types of anomalies. This ensures that new
+anomaly type is not going to break the AlertGenerator logic.
+
+2. DataStorage
+Path: uml_models/DataStorage.png
+DataStorage class is the main data center that keeps all Patient data and manages the queries.
+This model implements composition hierarchy: DataStorage keeps Patient data, and every Patient
+has PatientRecords class. The access manager implemented to check whether the quiery from the 
+staff is appropriate or not. Also old data is deleted by DataDeletionPolicy to not keep this 
+logic inside of the DataStorage
+
+3. PatientIdentifier
+Path: uml_models/PatientIdentifier.png
+Patient Identifier is relatively simple system to check whether generated patient matches the
+real HospitalPatient. It uses IdentityManager to verify match. If the match is approved, then
+query goes to the database, in other cases we log the mismatch via IdentityManager. 
+HospitalDatabase is shown as an Interface by now to not guess the type of the real database
+
+4. DataAccess
+Path: uml_models/DataAccess.png
+DataSourceAdapter implements the DataReader interface to store the data exactly in the DataStorage
+We introduce the DataListener to provide extensibility in the way on how u want to retreive the
+data. Three Listeners retreive the raw data(JSON or CSV), then standartise it via the DataParser and pass it 
+straight to the DataSourceAdapter. With this model of accessing data we can be confident that
+all information is going to be handled in the same secure way.
+
+
