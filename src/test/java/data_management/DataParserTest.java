@@ -12,10 +12,12 @@ class DataParserTest {
         DataParser parser = new DataParser();
         String rawData1 = "Patient ID: 5, Timestamp: 1714376789050, Label: ECG, Data: 0.54";
         String rawData2 = "5,1714376789050,ECG,0.54"; // CSV format
-        
+        String rawData3 = "Patient ID: 5, Timestamp: 1714376789050, Label: Alert, Data: triggered"; // Another format
+
         PatientRecord record1 = parser.parse(rawData1);
         PatientRecord record2 = parser.parse(rawData2);
-        
+        PatientRecord record3 = parser.parse(rawData3);
+
         assertNotNull(record1);
         assertNotNull(record2);
         assertEquals(5, record1.getPatientId());
@@ -24,6 +26,7 @@ class DataParserTest {
         assertEquals("ECG", record2.getRecordType());
         assertEquals(0.54, record1.getMeasurementValue());
         assertEquals(0.54, record2.getMeasurementValue());
+        assertEquals(1.0, record3.getMeasurementValue()); // "triggered" should be converted to 1.0
         assertEquals(1714376789050L, record1.getTimestamp());
         assertEquals(1714376789050L, record2.getTimestamp());
     }
