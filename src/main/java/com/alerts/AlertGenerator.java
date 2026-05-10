@@ -1,7 +1,11 @@
 package com.alerts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.data_management.DataStorage;
 import com.data_management.Patient;
+import com.data_management.PatientRecord;
 
 /**
  * The {@code AlertGenerator} class is responsible for monitoring patient data
@@ -11,6 +15,9 @@ import com.data_management.Patient;
  */
 public class AlertGenerator {
     private DataStorage dataStorage;
+    private AlertManager alertManager;
+    // private PatientIdentifier patientIdentifier; -- TODO
+    private ArrayList<ThresholdRule> rules;
 
     /**
      * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
@@ -22,6 +29,14 @@ public class AlertGenerator {
      */
     public AlertGenerator(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
+        alertManager = new AlertManager();
+        rules = new ArrayList<>();
+        rules.add(new BloodPressureCriticalRule());
+        rules.add(new BloodPressureTrendRule());
+        rules.add(new BloodSaturationRule());
+        rules.add(new ECGAbnormalRule());
+        rules.add(new HypotensiveHypoxemiaRule());
+        rules.add(new ManualTriggerRule());
     }
 
     /**
@@ -35,7 +50,15 @@ public class AlertGenerator {
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) {
-        // Implementation goes here
+        List<PatientRecord> patientRecords = dataStorage.getRecords(patient.getId(), System.currentTimeMillis() - 600000, System.currentTimeMillis()); // get records from the last 10 minutes
+        if (rules != null) {
+            for (ThresholdRule rule : rules) {
+                if (rule.isExceeded(patientRecords)) {
+                    Alert alert = new Alert(patient.getId() + "", rule.getConditionName(), System.currentTimeMillis());
+                    triggerAlert(alert);
+                }
+            }
+        }
     }
 
     /**
@@ -47,6 +70,10 @@ public class AlertGenerator {
      * @param alert the alert object containing details about the alert condition
      */
     private void triggerAlert(Alert alert) {
-        // Implementation might involve logging the alert or notifying staff
+        alertManager.dispatchAlert(alert);
+    }
+
+    public void addRule(ThresholdRule rule) {
+        rules.add(rule);
     }
 }

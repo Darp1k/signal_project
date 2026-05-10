@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Patient {
     private int patientId;
-    private List<PatientRecord> patientRecords;
+    private ArrayList<PatientRecord> patientRecords;
 
     /**
      * Constructs a new Patient with a specified ID.
@@ -59,5 +59,10 @@ public class Patient {
             }
         }
         return filteredRecords;
+    }
+
+    // returns the patient ID
+    public int getId() {
+        return patientId;
     }
 }

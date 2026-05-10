@@ -1,5 +1,6 @@
 package com.data_management;
 
+import java.io.File;
 import java.io.IOException;
 
 public class DataSourceAdapter implements DataReader{
@@ -11,8 +12,18 @@ public class DataSourceAdapter implements DataReader{
 
     @Override
     public void readData(DataStorage dataStorage) throws IOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readData'");
+        DataParser parser = new DataParser();
+        File dir = new File("/Users/petrmakarov/Java_Projects/SE_Project/signal_project/output"); 
+        
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles((d, name) -> name.endsWith(".txt"));
+            if (files != null) {
+                for (File file : files) {
+                    FileDataListener listener = new FileDataListener(file.getAbsolutePath(), parser, this);
+                    listener.start(); // Starts tailing the file in the background
+                }
+            }
+        }
     }
 
     // This method is responsible for routing the incoming patient record to the DataStorage for storage.
