@@ -99,4 +99,5 @@ data. Three Listeners retreive the raw data(JSON or CSV), then standartise it vi
 straight to the DataSourceAdapter. With this model of accessing data we can be confident that
 all information is going to be handled in the same secure way.
 
-
+# Code Coverage Documentation and Unit Test Documentation
+Everything is covered in the CodeCoverageDocumentation.pdf
