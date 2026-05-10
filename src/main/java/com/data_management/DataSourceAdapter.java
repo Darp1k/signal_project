@@ -10,10 +10,17 @@ public class DataSourceAdapter implements DataReader{
         this.dataStorage = dataStorage;
     }
 
+    /**
+     * Reads data from the specified FOLDER WITH FILES(not files itself) and routes it to the data storage.
+     *
+     * @param dataStorage the storage where data will be stored
+     * @param filePath the path to the folder containing the data files
+     * @throws IOException if an I/O error occurs while reading the file
+     */
     @Override
-    public void readData(DataStorage dataStorage) throws IOException {
+    public void readData(DataStorage dataStorage, String filePath) throws IOException {
         DataParser parser = new DataParser();
-        File dir = new File("/Users/petrmakarov/Java_Projects/SE_Project/signal_project/output"); 
+        File dir = new File(filePath); 
         
         if (dir.exists() && dir.isDirectory()) {
             File[] files = dir.listFiles((d, name) -> name.endsWith(".txt"));
@@ -22,6 +29,8 @@ public class DataSourceAdapter implements DataReader{
                     FileDataListener listener = new FileDataListener(file.getAbsolutePath(), parser, this);
                     listener.start(); // Starts tailing the file in the background
                 }
+            } else {
+                System.err.println("No .txt files found in the directory: " + filePath);
             }
         }
     }

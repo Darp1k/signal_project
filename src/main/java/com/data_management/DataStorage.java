@@ -89,7 +89,7 @@ public class DataStorage {
         
         try {
             //start to read data in the storage
-            reader.readData(storage);
+            reader.readData(storage, "/Users/petrmakarov/Java_Projects/SE_Project/signal_project/output");
             System.out.println("Listeners started. Waiting for data...");
             
             // alert system

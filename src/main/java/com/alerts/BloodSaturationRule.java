@@ -13,7 +13,7 @@ public class BloodSaturationRule implements ThresholdRule {
     public boolean isExceeded(List<PatientRecord> records) {
         List<PatientRecord> saturationRecords = new ArrayList<>();
         for (PatientRecord record : records) {
-            if (record.getRecordType().equals("BloodSaturation")) {
+            if (record.getRecordType().equals("Saturation")) {
                 saturationRecords.add(record);
             }
         }

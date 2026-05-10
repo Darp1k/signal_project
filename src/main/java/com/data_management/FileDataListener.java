@@ -45,10 +45,10 @@ public class FileDataListener implements DataListener {
     }
 
     private void onLineRead(String rawData) {
-        // 1. Parse the string into a record
+        // Parse the string into a record
         PatientRecord record = parser.parse(rawData);
         
-        // 2. If valid, route it to the DataStorage via the adapter
+        // If valid, route it to the DataStorage via the adapter
         if (record != null) {
             adapter.routeData(record);
         }
