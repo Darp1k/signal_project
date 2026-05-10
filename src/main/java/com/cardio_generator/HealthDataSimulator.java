@@ -112,6 +112,9 @@ public class HealthDataSimulator {
                         }
                     }
                     break;
+                case "HealthDataSimulator":
+                    // This case is to handle the scenario when HealthDataSimulator is called from Main with arguments
+                    break;
                 default:
                     System.err.println("Unknown option '" + args[i] + "'");
                     printHelp();
