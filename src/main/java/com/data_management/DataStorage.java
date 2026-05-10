@@ -1,9 +1,10 @@
 package com.data_management;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alerts.AlertGenerator;
 
 /**
@@ -20,7 +21,7 @@ public class DataStorage {
      * structure.
      */
     public DataStorage() {
-        this.patientMap = new HashMap<>();
+        this.patientMap = new ConcurrentHashMap<>();
     }
 
     /**
@@ -85,7 +86,6 @@ public class DataStorage {
     public static void main(String[] args) {
         DataStorage storage = new DataStorage();
         DataReader reader = new DataSourceAdapter(storage);
-        System.out.println("---- DATA STORAGE ROUTE TRIGGERED ----");
         
         try {
             //start to read data in the storage
@@ -94,12 +94,19 @@ public class DataStorage {
             
             // alert system
             AlertGenerator alertGenerator = new AlertGenerator(storage);
-            
+            System.out.println("Alert generator initialized. Starting data evaluation...");
             // continuously check the data for alert conditions
             while(true) {
-                for (Patient patient : storage.getAllPatients()) {
-                    alertGenerator.evaluateData(patient);
+                try{
+                    for (Patient patient : storage.getAllPatients()) {
+                        alertGenerator.evaluateData(patient);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error while evaluating data for alerts: " + e.getMessage());
+                    e.printStackTrace();
                 }
+                System.out.println("Data evaluation cycle completed. Waiting for next cycle...");
+                
                 // Sleep for a second so we don't crash the CPU with an infinite loop
                 Thread.sleep(1000); 
             }

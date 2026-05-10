@@ -31,12 +31,12 @@ public class AlertGenerator {
         this.dataStorage = dataStorage;
         alertManager = new AlertManager();
         rules = new ArrayList<>();
-        rules.add(new BloodPressureCriticalRule());
-        rules.add(new BloodPressureTrendRule());
-        rules.add(new BloodSaturationRule());
-        rules.add(new ECGAbnormalRule());
-        rules.add(new HypotensiveHypoxemiaRule());
-        rules.add(new ManualTriggerRule());
+        this.addRule(new BloodPressureCriticalRule());
+        this.addRule(new BloodPressureTrendRule());
+        this.addRule(new BloodSaturationRule());
+        this.addRule(new ECGAbnormalRule());
+        this.addRule(new HypotensiveHypoxemiaRule());
+        this.addRule(new ManualTriggerRule());
     }
 
     /**

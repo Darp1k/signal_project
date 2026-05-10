@@ -1,7 +1,8 @@
 package com.data_management;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Represents a patient and manages their medical records.
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class Patient {
     private int patientId;
-    private ArrayList<PatientRecord> patientRecords;
+    private List<PatientRecord> patientRecords;
 
     /**
      * Constructs a new Patient with a specified ID.
@@ -21,7 +22,7 @@ public class Patient {
      */
     public Patient(int patientId) {
         this.patientId = patientId;
-        this.patientRecords = new ArrayList<>();
+        this.patientRecords = Collections.synchronizedList(new ArrayList<>());
     }
 
     /**
