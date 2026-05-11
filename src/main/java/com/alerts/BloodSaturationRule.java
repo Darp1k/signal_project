@@ -7,6 +7,7 @@ import java.util.List;
 
 public class BloodSaturationRule implements ThresholdRule {
 
+    private AlertFactory factory = new BloodOxygenAlertFactory();
     private String triggeredCondition = "Blood Saturation Alert";
 
     @Override
@@ -44,7 +45,13 @@ public class BloodSaturationRule implements ThresholdRule {
     }
 
     @Override
-    public String getConditionName() {
-        return triggeredCondition;
+    public Alert createAlert(String patientId, long timestamp) {
+        Alert alert = factory.createAlert(patientId, triggeredCondition, timestamp);
+        
+        // Oxygen issues are highly critical
+        alert = new PriorityAlertDecorator(alert, "HIGH");
+        alert = new RepeatedAlertDecorator(alert, 3, 60000); 
+        
+        return alert;
     }
 }

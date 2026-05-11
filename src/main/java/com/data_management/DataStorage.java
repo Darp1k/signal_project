@@ -89,7 +89,8 @@ public class DataStorage {
         
         try {
             //start to read data in the storage
-            reader.readData(storage, "/Users/petrmakarov/Java_Projects/SE_Project/signal_project/output");
+            reader.readData(storage, "output");
+            Thread.sleep(2000); // Wait for the listener to process the file
             System.out.println("Listeners started. Waiting for data...");
             
             // alert system
@@ -105,7 +106,6 @@ public class DataStorage {
                     System.err.println("Error while evaluating data for alerts: " + e.getMessage());
                     e.printStackTrace();
                 }
-                System.out.println("Data evaluation cycle completed. Waiting for next cycle...");
                 
                 // Sleep for a second so we don't crash the CPU with an infinite loop
                 Thread.sleep(1000); 

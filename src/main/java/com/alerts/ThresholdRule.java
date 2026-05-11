@@ -6,5 +6,5 @@ import com.data_management.PatientRecord;
 
 public interface ThresholdRule {
     public boolean isExceeded(List<PatientRecord> records);
-    public String getConditionName();
+    public Alert createAlert(String patientId, long timestamp);
 } 

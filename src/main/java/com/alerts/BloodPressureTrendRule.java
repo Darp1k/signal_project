@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BloodPressureTrendRule implements ThresholdRule {
+    private AlertFactory factory = new BloodPressureAlertFactory();
 
     @Override
     public boolean isExceeded(List<PatientRecord> records) {
@@ -13,11 +14,6 @@ public class BloodPressureTrendRule implements ThresholdRule {
         List<PatientRecord> diastolic = filterRecords(records, "DiastolicPressure");
 
         return checkTrend(systolic) || checkTrend(diastolic);
-    }
-
-    @Override
-    public String getConditionName() {
-        return "Blood Pressure Trend Alert";
     }
 
     private List<PatientRecord> filterRecords(List<PatientRecord> records, String type) {
@@ -47,5 +43,15 @@ public class BloodPressureTrendRule implements ThresholdRule {
             }
         }
         return false;
+    }
+
+    @Override
+    public Alert createAlert(String patientId, long timestamp) {
+        Alert alert = factory.createAlert(patientId, "Blood Pressure Trend Alert", timestamp);
+        
+        // A trend is concerning but usually not an immediate emergency
+        alert = new PriorityAlertDecorator(alert, "MEDIUM");
+        
+        return alert;
     }
 }

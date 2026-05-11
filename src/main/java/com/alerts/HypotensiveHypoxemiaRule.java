@@ -4,6 +4,7 @@ import com.data_management.PatientRecord;
 import java.util.List;
 
 public class HypotensiveHypoxemiaRule implements ThresholdRule {
+    private AlertFactory factory = new BloodOxygenAlertFactory();
 
     @Override
     public boolean isExceeded(List<PatientRecord> records) {
@@ -23,7 +24,13 @@ public class HypotensiveHypoxemiaRule implements ThresholdRule {
     }
 
     @Override
-    public String getConditionName() {
-        return "Hypotensive Hypoxemia Alert";
+    public Alert createAlert(String patientId, long timestamp) {
+        Alert alert = factory.createAlert(patientId, "Hypotensive Hypoxemia Alert", timestamp);
+        
+        // if both conditions are met it is definirely critical
+        alert = new PriorityAlertDecorator(alert, "CRITICAL");
+        alert = new RepeatedAlertDecorator(alert, 10, 15000); // very fast repeat
+        
+        return alert;
     }
 }

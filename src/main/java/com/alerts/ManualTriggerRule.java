@@ -17,7 +17,12 @@ public class ManualTriggerRule implements ThresholdRule {
     }
 
     @Override
-    public String getConditionName() {
-        return "Manual Patient/Nurse Triggered Alert";
+    public Alert createAlert(String patientId, long timestamp) {
+        Alert alert = new BasicAlert(patientId, "Manual Patient/Nurse Triggered Alert", timestamp);
+        
+        // Manual triggers should always be high priority
+        alert = new PriorityAlertDecorator(alert, "HIGH");
+        
+        return alert;
     }
 }

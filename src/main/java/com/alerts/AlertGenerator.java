@@ -2,6 +2,8 @@ package com.alerts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.data_management.DataStorage;
 import com.data_management.Patient;
@@ -16,9 +18,9 @@ import com.data_management.PatientRecord;
 public class AlertGenerator {
     private DataStorage dataStorage;
     private AlertManager alertManager;
-    // private PatientIdentifier patientIdentifier; -- TODO
     private ArrayList<ThresholdRule> rules;
-
+    private Map<String, Long> lastAlertsTimes; // Map to track the last alert time for each patient
+    private final int COOLDOWN_PERIOD_MS = 240000; // 4 miunutes cooldown for repeated alerts
     /**
      * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
      * The {@code DataStorage} is used to retrieve patient data that this class
@@ -31,10 +33,11 @@ public class AlertGenerator {
         this.dataStorage = dataStorage;
         alertManager = new AlertManager();
         rules = new ArrayList<>();
+        lastAlertsTimes = new ConcurrentHashMap<>();
         this.addRule(new BloodPressureCriticalRule());
         this.addRule(new BloodPressureTrendRule());
         this.addRule(new BloodSaturationRule());
-        this.addRule(new ECGAbnormalRule());
+        // this.addRule(new ECGAbnormalRule());
         this.addRule(new HypotensiveHypoxemiaRule());
         this.addRule(new ManualTriggerRule());
     }
@@ -50,12 +53,18 @@ public class AlertGenerator {
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) {
-        List<PatientRecord> patientRecords = dataStorage.getRecords(patient.getId(), System.currentTimeMillis() - 600000, System.currentTimeMillis()); // get records from the last 10 minutes
+        List<PatientRecord> patientRecords = dataStorage.getRecords(patient.getId(), System.currentTimeMillis() - 240000, System.currentTimeMillis()); // get records from the last 10 minutes
         if (rules != null) {
             for (ThresholdRule rule : rules) {
                 if (rule.isExceeded(patientRecords)) {
-                    Alert alert = new Alert(patient.getId() + "", rule.getConditionName(), System.currentTimeMillis());
-                    triggerAlert(alert);
+                    String IDandCondition = patient.getId() + "-" + rule.getClass().getSimpleName();
+                    if (!lastAlertsTimes.containsKey(IDandCondition) || (System.currentTimeMillis() - lastAlertsTimes.get(IDandCondition) > COOLDOWN_PERIOD_MS)) {
+                        lastAlertsTimes.put(IDandCondition, System.currentTimeMillis());
+                        Alert alert = rule.createAlert(String.valueOf(patient.getId()), System.currentTimeMillis());
+                        triggerAlert(alert);
+                    } else {
+                        continue; // Skip alert if it's within the cooldown period
+                    }
                 }
             }
         }

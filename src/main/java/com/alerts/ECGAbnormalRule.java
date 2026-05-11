@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 public class ECGAbnormalRule implements ThresholdRule {
 
-    // had to assume that exceeding the average by 20% is considered an anomaly
-    private static final double EXCEEDED_THRESHOLD = 1.20; 
+    // had to assume that exceeding the average by 5% is considered an anomaly
+    private static final double EXCEEDED_THRESHOLD = 1.50; 
+    private AlertFactory factory = new ECGAlertFactory();
+
 
     @Override
     public boolean isExceeded(List<PatientRecord> records) {
@@ -35,7 +37,12 @@ public class ECGAbnormalRule implements ThresholdRule {
     }
 
     @Override
-    public String getConditionName() {
-        return "Abnormal ECG Data Alert";
+    public Alert createAlert(String patientId, long timestamp) {
+        Alert alert = factory.createAlert(patientId, "Abnormal ECG Data Alert", timestamp);
+
+        // Heart issues are always high priority
+        alert = new PriorityAlertDecorator(alert, "HIGH");
+
+        return alert;
     }
 }
