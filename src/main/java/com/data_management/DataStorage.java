@@ -15,13 +15,21 @@ import com.alerts.AlertGenerator;
  */
 public class DataStorage {
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
+    private static DataStorage instance; // Singleton instance of DataStorage
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
      * structure.
      */
-    public DataStorage() {
+    private DataStorage() {
         this.patientMap = new ConcurrentHashMap<>();
+    }
+
+    public static synchronized DataStorage getInstance() {
+        if (instance == null) {
+            instance = new DataStorage();
+        }
+        return instance;
     }
 
     /**
@@ -84,17 +92,17 @@ public class DataStorage {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        DataStorage storage = new DataStorage();
-        DataReader reader = new DataSourceAdapter(storage);
+        DataStorage storage = DataStorage.getInstance();
+        DataReader reader = new DataSourceAdapter();
         
         try {
             //start to read data in the storage
-            reader.readData(storage, "output");
+            reader.readData("output");
             Thread.sleep(2000); // Wait for the listener to process the file
             System.out.println("Listeners started. Waiting for data...");
             
             // alert system
-            AlertGenerator alertGenerator = new AlertGenerator(storage);
+            AlertGenerator alertGenerator = new AlertGenerator();
             System.out.println("Alert generator initialized. Starting data evaluation...");
             // continuously check the data for alert conditions
             while(true) {

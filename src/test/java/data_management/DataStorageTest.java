@@ -17,7 +17,7 @@ class DataStorageTest {
      */
     @Test
     void testAddAndGetRecords() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         DataSourceAdapter adapter = new DataSourceAdapter(storage);
 
         try{

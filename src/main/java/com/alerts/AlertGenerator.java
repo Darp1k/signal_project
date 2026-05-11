@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.xml.crypto.Data;
+
 import com.data_management.DataStorage;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
@@ -29,15 +31,15 @@ public class AlertGenerator {
      * @param dataStorage the data storage system that provides access to patient
      *                    data
      */
-    public AlertGenerator(DataStorage dataStorage) {
-        this.dataStorage = dataStorage;
+    public AlertGenerator() {
+        this.dataStorage = DataStorage.getInstance();
         alertManager = new AlertManager();
         rules = new ArrayList<>();
         lastAlertsTimes = new ConcurrentHashMap<>();
         this.addRule(new BloodPressureCriticalRule());
         this.addRule(new BloodPressureTrendRule());
         this.addRule(new BloodSaturationRule());
-        // this.addRule(new ECGAbnormalRule());
+        this.addRule(new ECGAbnormalRule());
         this.addRule(new HypotensiveHypoxemiaRule());
         this.addRule(new ManualTriggerRule());
     }
@@ -62,8 +64,6 @@ public class AlertGenerator {
                         lastAlertsTimes.put(IDandCondition, System.currentTimeMillis());
                         Alert alert = rule.createAlert(String.valueOf(patient.getId()), System.currentTimeMillis());
                         triggerAlert(alert);
-                    } else {
-                        continue; // Skip alert if it's within the cooldown period
                     }
                 }
             }

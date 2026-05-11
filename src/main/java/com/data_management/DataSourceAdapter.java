@@ -6,19 +6,18 @@ import java.io.IOException;
 public class DataSourceAdapter implements DataReader{
     private DataStorage dataStorage;
 
-    public DataSourceAdapter(DataStorage dataStorage) {
-        this.dataStorage = dataStorage;
+    public DataSourceAdapter() {
+        this.dataStorage = DataStorage.getInstance();
     }
 
     /**
      * Reads data from the specified FOLDER WITH FILES(not files itself) and routes it to the data storage.
      *
-     * @param dataStorage the storage where data will be stored
      * @param filePath the path to the folder containing the data files
      * @throws IOException if an I/O error occurs while reading the file
      */
     @Override
-    public void readData(DataStorage dataStorage, String filePath) throws IOException {
+    public void readData(String filePath) throws IOException {
         DataParser parser = new DataParser();
         File dir = new File(filePath); 
         
