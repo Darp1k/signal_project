@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ECGAbnormalRule implements ThresholdRule {
-
-    // had to assume that exceeding the average by 5% is considered an anomaly
-    private static final double EXCEEDED_THRESHOLD = 1.50; 
+    // because ecg is waveform data, it will always has peaks, meaning that calculating a threshold for mean
+    // is not very useful since every heartbeat(spike) will be above average(~0). The unhealthy condition is
+    // when the ecg peak (absolut) value is higher that 1.5. 
+    private static final double THRESHOLD = 1.5; 
     private AlertFactory factory = new ECGAlertFactory();
 
 
@@ -19,16 +20,9 @@ public class ECGAbnormalRule implements ThresholdRule {
 
         if (ecgRecords.isEmpty()) return false;
 
-        // Calculate the average
-        double sum = 0;
-        for (PatientRecord record : ecgRecords) {
-            sum += Math.abs(record.getMeasurementValue()); // Using absolute value for waveforms
-        }
-        double average = sum / ecgRecords.size();
-
         // Check if any peak exceeds the average
         for (PatientRecord record : ecgRecords) {
-            if (Math.abs(record.getMeasurementValue()) > average * EXCEEDED_THRESHOLD) {
+            if (Math.abs(record.getMeasurementValue()) > THRESHOLD) {
                 return true;
             }
         }
