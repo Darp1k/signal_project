@@ -18,10 +18,10 @@ class DataStorageTest {
     @Test
     void testAddAndGetRecords() {
         DataStorage storage = DataStorage.getInstance();
-        DataSourceAdapter adapter = new DataSourceAdapter(storage);
+        DataSourceAdapter adapter = new DataSourceAdapter();
 
         try{
-            adapter.readData(storage, "src/test/java/data_management");
+            adapter.readData("src/test/java/data_management");
             Thread.sleep(2000); // Wait for the listener to process the file
         } catch (Exception e) {
             fail("Exception should not be thrown: " + e.getMessage());

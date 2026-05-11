@@ -1,7 +1,5 @@
 package alerts;
 
-import javax.xml.crypto.Data;
-
 import org.junit.jupiter.api.Test;
 import com.alerts.AlertGenerator;
 import com.data_management.DataStorage;
@@ -35,7 +33,7 @@ class AlertGeneratorTest {
         storage.addPatientData(7, 1.0, "Alert", currentTime);
 
         // Initialize the generator
-        AlertGenerator generator = new AlertGenerator(storage);
+        AlertGenerator generator = new AlertGenerator();
 
         // Loop through all patients  and evaluate them
         for (Patient patient : storage.getAllPatients()) {
@@ -49,7 +47,7 @@ class AlertGeneratorTest {
         storage.addPatientData(2, 120.0, "SystolicPressure", System.currentTimeMillis());
         Patient patient = storage.getAllPatients().get(0);
 
-        AlertGenerator generator = new AlertGenerator(storage);
+        AlertGenerator generator = new AlertGenerator();
         generator.evaluateData(patient);
     }
 }
