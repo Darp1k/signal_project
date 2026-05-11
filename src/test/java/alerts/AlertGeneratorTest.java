@@ -16,16 +16,16 @@ class AlertGeneratorTest {
         storage.addPatientData(1, 55.0, "DiastolicPressure", currentTime);
 
         storage.addPatientData(2, 120.0, "SystolicPressure", currentTime);
-        storage.addPatientData(2, 135.0, "SystolicPressure", currentTime + 1000);
-        storage.addPatientData(2, 150.0, "SystolicPressure", currentTime + 2000);
+        storage.addPatientData(2, 135.0, "SystolicPressure", currentTime - 1000);
+        storage.addPatientData(2, 150.0, "SystolicPressure", currentTime - 2000);
 
         storage.addPatientData(3, 89.0, "Saturation", currentTime);
 
         storage.addPatientData(4, 99.0, "Saturation", currentTime);
-        storage.addPatientData(4, 92.0, "Saturation", currentTime + 1000);
+        storage.addPatientData(4, 92.0, "Saturation", currentTime - 1000);
 
         storage.addPatientData(5, 0.5, "ECG", currentTime);
-        storage.addPatientData(5, 2.3, "ECG", currentTime + 1000);
+        storage.addPatientData(5, 2.3, "ECG", currentTime - 1000);
 
         storage.addPatientData(6, 85.0, "SystolicPressure", currentTime);
         storage.addPatientData(6, 88.0, "Saturation", currentTime);
