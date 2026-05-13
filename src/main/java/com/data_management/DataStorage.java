@@ -1,5 +1,7 @@
 package com.data_management;
 
+import java.net.URI;
+import java.net.http.WebSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +99,13 @@ public class DataStorage {
         
         try {
             //start to read data in the storage
-            reader.readData("output");
+            // FileDataListener fileListener = new FileDataListener("output", new DataParser(), new DataSourceAdapter());
+            // reader.readData(fileListener);
+
+            HospitalWebSocketListener client = new HospitalWebSocketListener(new URI("ws://localhost:8080"));
+            reader.readData(client);
+            
+
             Thread.sleep(2000); // Wait for the listener to process the file
             System.out.println("Listeners started. Waiting for data...");
             

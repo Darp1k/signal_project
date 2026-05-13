@@ -10,5 +10,5 @@ public interface DataReader {
      * @param filePath the path to the file containing the data
      * @throws IOException if there is an error reading the data
      */
-    void readData(String filePath) throws IOException;
+    void readData(DataListener listener) throws IOException;
 }

@@ -3,6 +3,8 @@ package com.data_management;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.crypto.Data;
+
 public class DataSourceAdapter implements DataReader{
     private DataStorage dataStorage;
 
@@ -17,21 +19,8 @@ public class DataSourceAdapter implements DataReader{
      * @throws IOException if an I/O error occurs while reading the file
      */
     @Override
-    public void readData(String filePath) throws IOException {
-        DataParser parser = new DataParser();
-        File dir = new File(filePath); 
-        
-        if (dir.exists() && dir.isDirectory()) {
-            File[] files = dir.listFiles((d, name) -> name.endsWith(".txt"));
-            if (files != null) {
-                for (File file : files) {
-                    FileDataListener listener = new FileDataListener(file.getAbsolutePath(), parser, this);
-                    listener.start(); // Starts tailing the file in the background
-                }
-            } else {
-                System.err.println("No .txt files found in the directory: " + filePath);
-            }
-        }
+    public void readData(DataListener listener) throws IOException {
+        listener.start();
     }
 
     // This method is responsible for routing the incoming patient record to the DataStorage for storage.

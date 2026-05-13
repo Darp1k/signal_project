@@ -1,23 +1,38 @@
 package com.data_management;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class FileDataListener implements DataListener {
-    private String filePath;
+    private String directory;
     private DataParser parser;
     private DataSourceAdapter adapter;
     private boolean isRunning;
 
-    public FileDataListener(String filePath, DataParser parser, DataSourceAdapter adapter) {
-        this.filePath = filePath;
+    public FileDataListener(String directory, DataParser parser, DataSourceAdapter adapter) {
+        this.directory = directory;
         this.parser = parser;
         this.adapter = adapter;
     }
-
+    
     @Override
     public void start() {
+        File dir = new File(directory);
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        startListening(file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+    }
+
+    public void startListening(String filePath) {
         isRunning = true;
         // Start a new thread so the listener doesn't block the main program
         new Thread(() -> {
