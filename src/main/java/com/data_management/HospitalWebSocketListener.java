@@ -1,11 +1,11 @@
 package com.data_management;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+// class that listens to the websocket server and proccesses the incoming data to the DataStorage
 public class HospitalWebSocketListener extends WebSocketClient implements DataListener {
     private DataParser dataParser;
     private DataStorage dataStorage;
@@ -61,24 +61,13 @@ public class HospitalWebSocketListener extends WebSocketClient implements DataLi
         ex.printStackTrace();
     }
 
-    public static void main(String[] args) {
-        try {
-            // Example usage connecting to localhost on port 8080
-            HospitalWebSocketListener client = new HospitalWebSocketListener(new URI("ws://localhost:8080"));
-            client.start();
-        } catch (URISyntaxException e) {
-            System.err.println("Invalid WebSocket URI format.");
-            e.printStackTrace();
-        }
-    }
-
    @Override
     public void start() {
-        this.connect();
+        this.connect(); // connect the client to the server
     }
 
     @Override
     public void stop() {
-        this.close();
+        this.close(); // disconnect
     }
 }

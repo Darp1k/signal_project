@@ -1,8 +1,9 @@
 package com.alerts;
 
 import com.data_management.PatientRecord;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ECGAbnormalRule implements ThresholdRule {
     // because ecg is waveform data, it will always has peaks, meaning that calculating a threshold for mean
@@ -14,9 +15,12 @@ public class ECGAbnormalRule implements ThresholdRule {
 
     @Override
     public boolean isExceeded(List<PatientRecord> records) {
-        List<PatientRecord> ecgRecords = records.stream()
-                .filter(r -> r.getRecordType().equals("ECG"))
-                .collect(Collectors.toList());
+        List<PatientRecord> ecgRecords = new ArrayList<>();
+        for (PatientRecord record : records) {
+            if (record.getRecordType().equals("ECG")) {
+                ecgRecords.add(record);
+            }
+        }
 
         if (ecgRecords.isEmpty()) return false;
 
@@ -30,6 +34,9 @@ public class ECGAbnormalRule implements ThresholdRule {
         return false;
     }
 
+    /**
+     * creates an alert using the specified alert factory and decorates it with High priority
+     */
     @Override
     public Alert createAlert(String patientId, long timestamp) {
         Alert alert = factory.createAlert(patientId, "Abnormal ECG Data Alert", timestamp);

@@ -89,8 +89,11 @@ public class DataStorage {
      * The main method for the DataStorage class.
      * Initializes the system, reads data into storage, and continuously monitors
      * and evaluates patient data.
+     * @param args :
+     * file: runs the file listener
+     * websocket: runs the websocket listener
      * 
-     * @param args command line arguments
+     * expects the program to run the related method of output
      */
     public static void main(String[] args) {
         DataStorage storage = DataStorage.getInstance();
@@ -98,12 +101,13 @@ public class DataStorage {
         
         try {
             //start to read data in the storage
-            // FileDataListener fileListener = new FileDataListener("output", new DataParser(), new DataSourceAdapter());
-            // reader.readData(fileListener);
-
-            HospitalWebSocketListener client = new HospitalWebSocketListener(new URI("ws://localhost:8080"));
-            reader.readData(client);
-            
+            if (args.length > 0 && args[0].equals("file")) {
+                FileDataListener fileListener = new FileDataListener("output", new DataParser(), new DataSourceAdapter());
+                reader.readData(fileListener);
+            } else {
+                HospitalWebSocketListener client = new HospitalWebSocketListener(new URI("ws://localhost:8080"));
+                reader.readData(client);
+            }
 
             Thread.sleep(2000); // Wait for the listener to process the file
             System.out.println("Listeners started. Waiting for data...");

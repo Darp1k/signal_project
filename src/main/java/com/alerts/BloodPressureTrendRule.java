@@ -5,6 +5,7 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
+// rule to check for blood pressure trend
 public class BloodPressureTrendRule implements ThresholdRule {
     private AlertFactory factory = new BloodPressureAlertFactory();
 
@@ -26,6 +27,13 @@ public class BloodPressureTrendRule implements ThresholdRule {
         return filtered;
     }
 
+    /**
+     * ckeacks whether tree continuous records show an increasing
+     * or decreasing trend of more than 10 mmHg
+     * @param records patient records to check for the trend
+     * @return boolean value, true -- triggered, false -- not triggered
+     */
+
     private boolean checkTrend(List<PatientRecord> records) {
         if (records.size() < 3) return false;
 
@@ -45,6 +53,9 @@ public class BloodPressureTrendRule implements ThresholdRule {
         return false;
     }
 
+    /**
+     * creates an alert using the specified alert factory and decorates it with medium priority
+     */
     @Override
     public Alert createAlert(String patientId, long timestamp) {
         Alert alert = factory.createAlert(patientId, "Blood Pressure Trend Alert", timestamp);

@@ -3,10 +3,18 @@ package com.alerts;
 import com.data_management.PatientRecord;
 import java.util.List;
 
+// rule to check for critical blood pressure values
 public class BloodPressureCriticalRule implements ThresholdRule {
     private AlertFactory factory = new BloodPressureAlertFactory();
 
+
     @Override
+    /**
+     * Checks if any of the patient's blood pressure 
+     * reaches the critical threshold
+     * Systolic > 180 or < 90
+     * Diastolic > 120 or < 60
+     */
     public boolean isExceeded(List<PatientRecord> records) {
         for (PatientRecord record : records) {
             String type = record.getRecordType();
@@ -22,6 +30,9 @@ public class BloodPressureCriticalRule implements ThresholdRule {
         return false;
     }
 
+    /**
+     * creates an alert using the specified alert factory and decorates it with high priority and repeat decorators
+     */
     @Override
     public Alert createAlert(String patientId, long timestamp) {
         Alert alert = factory.createAlert(patientId, "Critical Blood Pressure Alert", timestamp);

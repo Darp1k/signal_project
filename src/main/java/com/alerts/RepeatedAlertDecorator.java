@@ -1,5 +1,6 @@
 package com.alerts;
 
+// decorator class to add repeated alert functionality 
 public class RepeatedAlertDecorator extends AlertDecorator {
     private int repeatCount;
     private long repeatInterval;

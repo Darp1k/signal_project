@@ -20,7 +20,7 @@ public class AlertGenerator {
     private AlertManager alertManager;
     private ArrayList<ThresholdRule> rules;
     private Map<String, Long> lastAlertsTimes; // Map to track the last alert time for each patient
-    private final int COOLDOWN_PERIOD_MS = 240000; // 4 miunutes cooldown for repeated alerts
+    private final int COOLDOWN_PERIOD_MS = 600000; // 10 miunutes cooldown for repeated alerts
     /**
      * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
      * The {@code DataStorage} is used to retrieve patient data that this class
@@ -45,15 +45,12 @@ public class AlertGenerator {
     /**
      * Evaluates the specified patient's data to determine if any alert conditions
      * are met. If a condition is met, an alert is triggered via the
-     * {@link #triggerAlert}
-     * method. This method should define the specific conditions under which an
-     * alert
-     * will be triggered.
-     *
+     * {@link #triggerAlert} method. Also the cooldown logic is implemented
+     * to prevent alert spamming for the same condition within a short time frame.
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) {
-        List<PatientRecord> patientRecords = dataStorage.getRecords(patient.getId(), System.currentTimeMillis() - 240000, System.currentTimeMillis()); // get records from the last 10 minutes
+        List<PatientRecord> patientRecords = dataStorage.getRecords(patient.getId(), System.currentTimeMillis() - 600000, System.currentTimeMillis()); // get records from the last 10 minutes
         if (rules != null) {
             for (ThresholdRule rule : rules) {
                 if (rule.isExceeded(patientRecords)) {
@@ -80,6 +77,7 @@ public class AlertGenerator {
         alertManager.dispatchAlert(alert);
     }
 
+    // method to add new rule to the alert generator
     public void addRule(ThresholdRule rule) {
         rules.add(rule);
     }

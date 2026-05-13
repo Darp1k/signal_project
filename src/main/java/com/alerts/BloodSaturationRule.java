@@ -5,6 +5,7 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
+// rule to check for blood saturation levels and trends
 public class BloodSaturationRule implements ThresholdRule {
 
     private AlertFactory factory = new BloodOxygenAlertFactory();
@@ -44,6 +45,10 @@ public class BloodSaturationRule implements ThresholdRule {
         return false;
     }
 
+    /**
+     * creates an alert using the specified alert factory and decorates it with High priority
+     * and repetition once every minute for 3 minutes
+     */
     @Override
     public Alert createAlert(String patientId, long timestamp) {
         Alert alert = factory.createAlert(patientId, triggeredCondition, timestamp);

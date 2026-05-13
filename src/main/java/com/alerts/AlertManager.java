@@ -13,6 +13,12 @@ public class AlertManager {
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
 
+    /**
+     * Dispatches the given alert. If alert is a {@link RepeatedAlertDecorator},
+     * it will be sheduled to repeat at the specified intervals until the repeat
+     * count runs out. 
+     * @param alert
+     */
     public void dispatchAlert(Alert alert) {
         // Immediately output the alert
         System.out.println("ALERT: Patient ID " + alert.getPatientId() + 

@@ -1,5 +1,6 @@
 package com.alerts;
 
+// decorator class that allows us to extend alert functionality
 public abstract class AlertDecorator implements Alert {
     private Alert decoratedAlert;
 

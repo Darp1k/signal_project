@@ -3,9 +3,11 @@ package com.alerts;
 import com.data_management.PatientRecord;
 import java.util.List;
 
+// rule to check for hypotensive hypoxemia condition
 public class HypotensiveHypoxemiaRule implements ThresholdRule {
     private AlertFactory factory = new BloodOxygenAlertFactory();
 
+    // method to check the combined critical condition
     @Override
     public boolean isExceeded(List<PatientRecord> records) {
         boolean hasLowSystolic = false;
@@ -23,6 +25,9 @@ public class HypotensiveHypoxemiaRule implements ThresholdRule {
         return hasLowSystolic && hasLowSaturation;
     }
 
+    /**
+     * creates an alert with critical pririty and very fast repetition since this is a life-threatening condition
+     */
     @Override
     public Alert createAlert(String patientId, long timestamp) {
         Alert alert = factory.createAlert(patientId, "Hypotensive Hypoxemia Alert", timestamp);
