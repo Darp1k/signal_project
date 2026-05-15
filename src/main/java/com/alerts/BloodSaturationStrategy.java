@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 // rule to check for blood saturation levels and trends
-public class BloodSaturationRule implements ThresholdRule {
+public class BloodSaturationStrategy implements AlertStrategy {
 
     private AlertFactory factory = new BloodOxygenAlertFactory();
     private String triggeredCondition = "Blood Saturation Alert";
 
     @Override
-    public boolean isExceeded(List<PatientRecord> records) {
+    public boolean checkAlert(List<PatientRecord> records) {
         List<PatientRecord> saturationRecords = new ArrayList<>();
         for (PatientRecord record : records) {
             if (record.getRecordType().equals("Saturation")) {

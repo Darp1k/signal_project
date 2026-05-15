@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 // rule to check for blood pressure trend
-public class BloodPressureTrendRule implements ThresholdRule {
+public class BloodPressureTrendStrategy implements AlertStrategy {
     private AlertFactory factory = new BloodPressureAlertFactory();
 
     @Override
-    public boolean isExceeded(List<PatientRecord> records) {
+    public boolean checkAlert(List<PatientRecord> records) {
         List<PatientRecord> systolic = filterRecords(records, "SystolicPressure");
         List<PatientRecord> diastolic = filterRecords(records, "DiastolicPressure");
 

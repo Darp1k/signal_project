@@ -6,13 +6,13 @@ import com.data_management.Patient;
 import com.data_management.PatientRecord;
 import java.util.List;
 
-class PatientTest {
+public class PatientTest {
 
     @Test
     /**
      * tests the getrecords method from patient.java, ensuring that only the expectd time range will be returned
      */
-    void testGetRecords() {
+    public void testGetRecords() {
         
         Patient patient = new Patient(1);
         patient.addRecord(100.0, "HeartRate", 1000L); // earlier than range

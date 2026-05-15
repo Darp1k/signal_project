@@ -4,7 +4,7 @@ import com.data_management.PatientRecord;
 import java.util.List;
 
 // rule to check for critical blood pressure values
-public class BloodPressureCriticalRule implements ThresholdRule {
+public class BloodPressureCriticalStrategy implements AlertStrategy {
     private AlertFactory factory = new BloodPressureAlertFactory();
 
 
@@ -15,7 +15,7 @@ public class BloodPressureCriticalRule implements ThresholdRule {
      * Systolic > 180 or < 90
      * Diastolic > 120 or < 60
      */
-    public boolean isExceeded(List<PatientRecord> records) {
+    public boolean checkAlert(List<PatientRecord> records) {
         for (PatientRecord record : records) {
             String type = record.getRecordType();
             double value = record.getMeasurementValue();

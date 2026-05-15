@@ -5,7 +5,7 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ECGAbnormalRule implements ThresholdRule {
+public class ECGAbnormalStrategy implements AlertStrategy {
     // because ecg is waveform data, it will always has peaks, meaning that calculating a threshold for mean
     // is not very useful since every heartbeat(spike) will be above average(~0). The unhealthy condition is
     // when the ecg peak (absolut) value is higher that 1.5. 
@@ -14,7 +14,7 @@ public class ECGAbnormalRule implements ThresholdRule {
 
 
     @Override
-    public boolean isExceeded(List<PatientRecord> records) {
+    public boolean checkAlert(List<PatientRecord> records) {
         List<PatientRecord> ecgRecords = new ArrayList<>();
         for (PatientRecord record : records) {
             if (record.getRecordType().equals("ECG")) {

@@ -4,11 +4,11 @@ import com.data_management.PatientRecord;
 import java.util.List;
 
 // rule to check for manual triggers from patients or nurses
-public class ManualTriggerRule implements ThresholdRule {
+public class ManualTriggerStrategy implements AlertStrategy {
 
     // method to check for any manual trigger(1.0 with type "Alert")
     @Override
-    public boolean isExceeded(List<PatientRecord> records) {
+    public boolean checkAlert(List<PatientRecord> records) {
         for (PatientRecord record : records) {
             // "triggered" is 1.0
             if (record.getRecordType().equals("Alert") && record.getMeasurementValue() == 1.0) {

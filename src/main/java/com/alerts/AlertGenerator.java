@@ -18,7 +18,7 @@ import com.data_management.PatientRecord;
 public class AlertGenerator {
     private DataStorage dataStorage;
     private AlertManager alertManager;
-    private ArrayList<ThresholdRule> rules;
+    private ArrayList<AlertStrategy> rules;
     private Map<String, Long> lastAlertsTimes; // Map to track the last alert time for each patient
     private final int COOLDOWN_PERIOD_MS = 600000; // 10 miunutes cooldown for repeated alerts
     /**
@@ -34,12 +34,12 @@ public class AlertGenerator {
         alertManager = new AlertManager();
         rules = new ArrayList<>();
         lastAlertsTimes = new ConcurrentHashMap<>();
-        this.addRule(new BloodPressureCriticalRule());
-        this.addRule(new BloodPressureTrendRule());
-        this.addRule(new BloodSaturationRule());
-        this.addRule(new ECGAbnormalRule());
-        this.addRule(new HypotensiveHypoxemiaRule());
-        this.addRule(new ManualTriggerRule());
+        this.addRule(new BloodPressureCriticalStrategy());
+        this.addRule(new BloodPressureTrendStrategy());
+        this.addRule(new BloodSaturationStrategy());
+        this.addRule(new ECGAbnormalStrategy());
+        this.addRule(new HypotensiveHypoxemiaStrategy());
+        this.addRule(new ManualTriggerStrategy());
     }
 
     /**
@@ -52,8 +52,8 @@ public class AlertGenerator {
     public void evaluateData(Patient patient) {
         List<PatientRecord> patientRecords = dataStorage.getRecords(patient.getId(), System.currentTimeMillis() - 600000, System.currentTimeMillis()); // get records from the last 10 minutes
         if (rules != null) {
-            for (ThresholdRule rule : rules) {
-                if (rule.isExceeded(patientRecords)) {
+            for (AlertStrategy rule : rules) {
+                if (rule.checkAlert(patientRecords)) {
                     String IDandCondition = patient.getId() + "-" + rule.getClass().getSimpleName();
                     if (!lastAlertsTimes.containsKey(IDandCondition) || (System.currentTimeMillis() - lastAlertsTimes.get(IDandCondition) > COOLDOWN_PERIOD_MS)) {
                         lastAlertsTimes.put(IDandCondition, System.currentTimeMillis());
@@ -78,7 +78,7 @@ public class AlertGenerator {
     }
 
     // method to add new rule to the alert generator
-    public void addRule(ThresholdRule rule) {
+    public void addRule(AlertStrategy rule) {
         rules.add(rule);
     }
 }

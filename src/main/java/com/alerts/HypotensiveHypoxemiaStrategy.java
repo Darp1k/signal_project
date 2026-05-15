@@ -4,12 +4,12 @@ import com.data_management.PatientRecord;
 import java.util.List;
 
 // rule to check for hypotensive hypoxemia condition
-public class HypotensiveHypoxemiaRule implements ThresholdRule {
+public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
     private AlertFactory factory = new BloodOxygenAlertFactory();
 
     // method to check the combined critical condition
     @Override
-    public boolean isExceeded(List<PatientRecord> records) {
+    public boolean checkAlert(List<PatientRecord> records) {
         boolean hasLowSystolic = false;
         boolean hasLowSaturation = false;
 
